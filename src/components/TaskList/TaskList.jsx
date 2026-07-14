@@ -1,7 +1,18 @@
 import TaskItem from "../TaskItem/TaskItem";
 
-export default function TaskList({ tasks, onDeleteTask, onToggleTask }) {
+export default function TaskList({ tasks, 
+                                    onDeleteTask,
+                                    onToggleTask,
+                                    onEditTask }) {
 
+    if (tasks.length === 0) {
+        return (
+            <div className="text-center text-gray-500 py-10">
+                No hay tareas todavía 📝
+            </div>
+        );
+    }
+    
     return (
 
         <div>
@@ -18,6 +29,7 @@ export default function TaskList({ tasks, onDeleteTask, onToggleTask }) {
                         task={task}
                         onDeleteTask={onDeleteTask}
                         onToggleTask={onToggleTask}
+                        onEditTask={onEditTask}
                     />
 
                 ))

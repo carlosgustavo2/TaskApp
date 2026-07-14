@@ -6,7 +6,11 @@ import './App.css'
 import Home from './pages/Home';
 
 function App() {
-  return <Home />;
+  return (
+        <div className="min-h-screen bg-gray-100 flex justify-center items-start py-10">
+            <Home />
+        </div>
+    );
 }
 
 export default App
