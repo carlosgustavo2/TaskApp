@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskForm from "../components/TaskForm/TaskForm";
 import TaskList from "../components/TaskList/TaskList";
 
 export default function Home() {
 
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState(() => {
+        const savedTasks = localStorage.getItem("tasks");
+        return savedTasks ? JSON.parse(savedTasks) : [];
+    });
 
     const addTask = (title) => {
 
@@ -45,6 +48,10 @@ export default function Home() {
     const completedTasks = tasks.filter(task => task.completed).length;
 
     const pendingTasks = tasks.filter(task => !task.completed).length;
+
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
 
 
     return (
