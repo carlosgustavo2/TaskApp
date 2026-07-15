@@ -128,11 +128,13 @@ export default function Home() {
 
     return (
 
-        <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl">
-
-            <h1 className="text-4xl font-bold text-center text-blue-600 mb-6">
+        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-8 w-full max-w-3xl border border-gray-200">
+            <h1 className="text-5xl font-extrabold text-center text-blue-700 mb-2">
                 📋 Task Manager
             </h1>
+            <p className="text-center text-gray-500 mb-8">
+                Organiza tus tareas de forma sencilla y rápida 🚀
+            </p>
 
             {/* Estadísticas */}
 

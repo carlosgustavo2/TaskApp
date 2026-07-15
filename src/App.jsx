@@ -7,7 +7,7 @@ import Home from './pages/Home';
 
 function App() {
   return (
-        <div className="min-h-screen bg-gray-100 flex justify-center items-start py-10">
+       <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 flex items-center justify-center p-6">
             <Home />
         </div>
     );

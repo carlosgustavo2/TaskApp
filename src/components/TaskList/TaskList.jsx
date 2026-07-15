@@ -7,8 +7,9 @@ export default function TaskList({ tasks,
 
     if (tasks.length === 0) {
         return (
-            <div className="text-center text-gray-500 py-10">
-                No hay tareas todavía 📝
+            <div className="text-center py-12 text-gray-500">
+                <p className="text-lg font-medium">No hay tareas todavía</p>
+                <p className="text-sm">Agrega la primera tarea para comenzar 🚀</p>
             </div>
         );
     }
@@ -17,7 +18,7 @@ export default function TaskList({ tasks,
 
         <div>
 
-            <h2 className="text-xl font-bold mb-4">
+            <h2 className="text-2xl font-bold text-gray-800 mb-5">
                 Lista de tareas
             </h2>
 

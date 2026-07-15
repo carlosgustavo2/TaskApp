@@ -21,7 +21,7 @@ export default function TaskItem({
 
     return (
 
-        <div className="flex justify-between items-center bg-gray-50 border rounded-lg p-4 mb-3 hover:shadow-md transition">
+        <div className="flex justify-between items-center bg-white border border-gray-200 rounded-2xl p-4 mb-4 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
 
             <div className="flex items-center gap-3 flex-1">
 
@@ -29,14 +29,14 @@ export default function TaskItem({
                     type="checkbox"
                     checked={task.completed}
                     onChange={() => onToggleTask(task.id)}
+                    className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
 
                 {
                     editing ? (
 
                         <form
-                            className="flex-1"
-                            onSubmit={(e) => {
+                                className="border border-gray-300 rounded-xl px-3 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500"                            onSubmit={(e) => {
                                 e.preventDefault();
                                 handleSave();
                             }}
@@ -54,10 +54,10 @@ export default function TaskItem({
                         ) : (
 
                         <p
-                            className={`text-lg ${
+                            className={`text-lg font-medium transition-colors ${
                                 task.completed
                                     ? "line-through text-gray-400"
-                                    : ""
+                                    : "text-gray-800"
                             }`}
                         >
                             {task.title}
@@ -75,8 +75,7 @@ export default function TaskItem({
 
                         <button
                             onClick={handleSave}
-                            className="bg-green-500 hover:bg-green-600 text-white p-2 rounded"
-                        >
+                            className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"                        >
                             <FaSave />
                         </button>
 
@@ -84,8 +83,7 @@ export default function TaskItem({
 
                         <button
                             onClick={() => setEditing(true)}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded"
-                        >
+                            className="bg-yellow-400 hover:bg-yellow-500 text-white p-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"                        >
                             <FaEdit />
                         </button>
 
@@ -93,8 +91,7 @@ export default function TaskItem({
 
                 <button
                     onClick={() => onDeleteTask(task.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
-                >
+                    className="bg-red-500 hover:bg-red-600 text-white p-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"                >
                     <FaTrash />
                 </button>
 
