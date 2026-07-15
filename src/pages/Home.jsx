@@ -4,12 +4,21 @@ import TaskList from "../components/TaskList/TaskList";
 
 export default function Home() {
 
+    // ==========================
+    // Estados
+    // ==========================
+
     const [tasks, setTasks] = useState(() => {
         const savedTasks = localStorage.getItem("tasks");
         return savedTasks ? JSON.parse(savedTasks) : [];
     });
 
     const [filter, setFilter] = useState("all");
+    const [search, setSearch] = useState("");
+
+    // ==========================
+    // Funciones
+    // ==========================
 
     const addTask = (title) => {
 
@@ -22,70 +31,110 @@ export default function Home() {
         };
 
         setTasks([...tasks, newTask]);
+
     };
 
+    const deleteTask = (id) => {
 
-    const deleteTask = (id) => { 
         setTasks(tasks.filter(task => task.id !== id));
+
     };
 
-    
     const toggleCompleted = (id) => {
+
         setTasks(
-        tasks.map(task =>
-            task.id === id
-                ? { ...task, completed: !task.completed }
-                : task
+
+            tasks.map(task =>
+
+                task.id === id
+                    ? { ...task, completed: !task.completed }
+                    : task
+
             )
+
         );
+
     };
 
     const editTask = (id, newTitle) => {
+
         if (!newTitle.trim()) return;
-            setTasks(
+
+        setTasks(
+
             tasks.map(task =>
+
                 task.id === id
                     ? { ...task, title: newTitle }
                     : task
+
             )
+
         );
 
     };
 
+    // ==========================
+    // Estadísticas
+    // ==========================
 
     const completedTasks = tasks.filter(task => task.completed).length;
 
     const pendingTasks = tasks.filter(task => !task.completed).length;
 
+    // ==========================
+    // Filtrar
+    // ==========================
+
     const filteredTasks = tasks.filter(task => {
 
-        if (filter === "completed") {
-            return task.completed;
-        }
+        const matchesFilter =
+            filter === "all"
+                ? true
+                : filter === "completed"
+                    ? task.completed
+                    : !task.completed;
 
-        if (filter === "pending") {
-            return !task.completed;
-        }
+        const matchesSearch =
+            task.title.toLowerCase().includes(search.toLowerCase());
 
-        return true;
+        return matchesFilter && matchesSearch;
 
     });
+
+    // ==========================
+    // Ordenar
+    // ==========================
 
     const sortedTasks = [...filteredTasks].sort((a, b) => {
+
         return a.completed - b.completed;
+
     });
 
-    
+    // ==========================
+    // LocalStorage
+    // ==========================
+
     useEffect(() => {
+
         localStorage.setItem("tasks", JSON.stringify(tasks));
+
     }, [tasks]);
 
+    // ==========================
+    // Vista
+    // ==========================
+
     return (
+
         <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl">
 
             <h1 className="text-4xl font-bold text-center text-blue-600 mb-6">
                 📋 Task Manager
             </h1>
+
+            {/* Estadísticas */}
 
             <div className="grid grid-cols-3 gap-4 mb-6">
 
@@ -105,6 +154,8 @@ export default function Home() {
                 </div>
 
             </div>
+
+            {/* Filtros */}
 
             <div className="flex justify-center gap-3 mb-6">
 
@@ -143,7 +194,25 @@ export default function Home() {
 
             </div>
 
+            {/* Buscador */}
+
+            <div className="mb-6">
+
+                <input
+                    type="text"
+                    placeholder="🔍 Buscar tarea..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+
+            </div>
+
+            {/* Formulario */}
+
             <TaskForm onAddTask={addTask} />
+
+            {/* Lista */}
 
             <TaskList
                 tasks={sortedTasks}
@@ -151,6 +220,9 @@ export default function Home() {
                 onToggleTask={toggleCompleted}
                 onEditTask={editTask}
             />
+
         </div>
-    );  
-}    
+
+    );
+
+}

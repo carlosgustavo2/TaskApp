@@ -6,7 +6,7 @@ export default function TaskForm({ onAddTask }) {
 
     const handleSubmit = (e) => {
 
-        e.preventDefault(); // Evita que la página se recargue
+        e.preventDefault();
 
         if (!text.trim()) return;
 
@@ -16,10 +16,12 @@ export default function TaskForm({ onAddTask }) {
     };
 
     return (
+
         <form
             onSubmit={handleSubmit}
             className="flex gap-2 mb-6"
         >
+
             <input
                 className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 type="text"
@@ -34,6 +36,9 @@ export default function TaskForm({ onAddTask }) {
             >
                 Agregar
             </button>
+
         </form>
+
     );
+
 }
