@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import TaskForm from "../components/TaskForm/TaskForm";
 import TaskList from "../components/TaskList/TaskList";
+import toast from "react-hot-toast";
 
 export default function Home() {
 
@@ -27,16 +28,44 @@ export default function Home() {
         const newTask = {
             id: Date.now(),
             title,
-            completed: false
+            completed: false,
+            createdAt: new Date().toISOString()
         };
 
         setTasks([...tasks, newTask]);
 
+        toast.success(`"${title}" agregada`, {
+            icon: "📋",       
+        });
     };
+
+
 
     const deleteTask = (id) => {
 
+        const deletedTask = tasks.find(task => task.id === id);
+
         setTasks(tasks.filter(task => task.id !== id));
+
+        toast.success(`"${deletedTask.title}" eliminada`, {
+            icon: "🗑️",
+        });
+
+    };
+
+    const clearCompleted = () => {
+
+        const completedCount = tasks.filter(task => task.completed).length;
+
+        setTasks(
+            tasks.filter(task => !task.completed)
+        );
+
+        if (completedCount > 0) {
+            toast.success(`${completedCount} tareas eliminadas`, {
+                icon: "🧹",
+            });
+        }
 
     };
 
@@ -61,16 +90,16 @@ export default function Home() {
         if (!newTitle.trim()) return;
 
         setTasks(
-
             tasks.map(task =>
-
                 task.id === id
                     ? { ...task, title: newTitle }
                     : task
-
             )
-
         );
+
+        toast.success(`"${newTitle}" actualizada`, {
+            icon: "✏️",
+        });
 
     };
 
@@ -194,6 +223,12 @@ export default function Home() {
                     Completadas
                 </button>
 
+                    <button
+                        onClick={clearCompleted}
+                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+                    >
+                        🗑 Limpiar completadas
+                    </button>
             </div>
 
             {/* Buscador */}
