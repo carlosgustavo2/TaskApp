@@ -182,3 +182,16 @@
     border-right-color: var(--border);
   }
 }
+
+body{
+
+    background:linear-gradient(
+        135deg,
+        #dbeafe,
+        #f8fafc,
+        #ede9fe
+    );
+
+    min-height:100vh;
+
+}

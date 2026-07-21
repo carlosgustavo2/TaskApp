@@ -10,7 +10,8 @@ export default function TaskItem({
     task,
     onDeleteTask,
     onToggleTask,
-    onEditTask
+    onEditTask,
+    darkMode
 }) {
 
     const [editing, setEditing] = useState(false);
@@ -65,8 +66,12 @@ export default function TaskItem({
 
     return (
 
-        <div className="flex justify-between items-center bg-white border border-gray-200 rounded-2xl p-5 mb-4 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
-
+        <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl p-5 mb-4 shadow-sm hover:shadow-xl transition-all duration-300 animate-fadeIn ${
+            darkMode
+                ? "bg-gray-800 border border-gray-700"
+                : "bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700"
+            }`}
+        >
             <div className="flex items-center gap-4 flex-1">
 
                 <input
@@ -101,17 +106,17 @@ export default function TaskItem({
                         <div className="flex-1">
 
                             <h3
-                                className={`text-lg font-semibold transition-all duration-300 ${
+                                className={`text-lg font-semibold transition-all duration-300 animate-fadeIn ${
                                     task.completed
                                         ? "line-through text-gray-400 opacity-70"
-                                        : "text-gray-800"
+                                        : "text-gray-500 dark:text-gray-400"
                                 }`}
                             >
                                 {task.title}
                             </h3>
 
-                            <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
-                                <FaCalendarAlt />
+                            <div className="text-gray-500 dark:text-gray-400">             
+                            <FaCalendarAlt />
                                 <span>{formatDate(task.createdAt)}</span>
                             </div>
 
@@ -137,14 +142,14 @@ export default function TaskItem({
 
             </div>
 
-            <div className="flex gap-2 ml-4">
+            <div className="flex justify-end gap-2 sm:ml-4">
 
                 {
                     editing ? (
 
                         <button
                             onClick={handleSave}
-                            className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-xl shadow-sm hover:scale-110 transition-all"
+                            className="bg-blue-600 text-white px-5 py-2 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"                            
                             title="Guardar"
                         >
                             <FaSave />
@@ -154,8 +159,7 @@ export default function TaskItem({
 
                         <button
                             onClick={() => setEditing(true)}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white p-3 rounded-lg"
-                            title="Editar"
+                            className="bg-yellow-600 text-white px-5 py-2 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                         >
                             <FaEdit />
                         </button>
@@ -165,7 +169,7 @@ export default function TaskItem({
 
                 <button
                     onClick={handleDelete}
-                    className="bg-red-500 hover:bg-red-600 text-white p-3 rounded-lg"
+                    className="bg-red-600 text-white px-5 py-2 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                     title="Eliminar"
                 >
                     <FaTrash />

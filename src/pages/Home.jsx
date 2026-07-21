@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import TaskForm from "../components/TaskForm/TaskForm";
 import TaskList from "../components/TaskList/TaskList";
 import toast from "react-hot-toast";
+import { FaMoon, FaSun } from "react-icons/fa";
 
 export default function Home() {
 
@@ -16,6 +17,11 @@ export default function Home() {
 
     const [filter, setFilter] = useState("all");
     const [search, setSearch] = useState("");
+
+    {/*DARK MODE*/}
+    const [darkMode, setDarkMode] = useState(() => {
+        return localStorage.theme === "dark";
+        });
 
     // ==========================
     // Funciones
@@ -146,56 +152,99 @@ export default function Home() {
     // ==========================
 
     useEffect(() => {
-
         localStorage.setItem("tasks", JSON.stringify(tasks));
 
     }, [tasks]);
 
     // ==========================
+    // DARK MODE
+    // ==========================
+    useEffect(() => {
+
+        if (darkMode) {
+
+            document.documentElement.classList.add("dark");
+
+            localStorage.theme = "dark";
+
+        } else {
+
+            document.documentElement.classList.remove("dark");
+
+            localStorage.theme = "light";
+
+        }
+
+    }, [darkMode]);
+
+    // ==========================
     // Vista
     // ==========================
-
     return (
 
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-8 w-full max-w-3xl border border-gray-200">
-            <h1 className="text-5xl font-extrabold text-center text-blue-700 mb-2">
+        <div className="bg-white dark:bg-slate-950 text-gray-900 dark:text-white rounded-2xl shadow-xl p-5 sm:p-8 w-full max-w-5xl mx-auto transition-all duration-500">
+            <div className="flex justify-end mb-4">
+                <button
+                    onClick={() => setDarkMode(!darkMode)}
+                    className="w-11 h-11 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center hover:scale-110 transition"
+                >
+                    { darkMode
+                        ? <FaSun className="text-yellow-300"/>
+                        : <FaMoon className="text-slate-700"/>
+                    }
+                </button>
+
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-center text-blue-600 dark:text-blue-400 mb-2">
                 📋 Task Manager
             </h1>
-            <p className="text-center text-gray-500 mb-8">
+            <p className="text-center text-base sm:text-xl text-gray-500 mb-8">
                 Organiza tus tareas de forma sencilla y rápida 🚀
             </p>
 
             {/* Estadísticas */}
 
-            <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
 
-                <div className="bg-blue-100 rounded-lg p-4 text-center">
-                    <h3 className="text-sm text-gray-500">Total</h3>
-                    <p className="text-2xl font-bold">{tasks.length}</p>
+                <div className="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-4 text-center">
+                    <h3 className="text-sm text-gray-600 dark:text-blue-300">
+                        Total
+                        </h3>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                        {tasks.length}
+                    </p>
                 </div>
 
-                <div className="bg-yellow-100 rounded-lg p-4 text-center">
-                    <h3 className="text-sm text-gray-500">Pendientes</h3>
-                    <p className="text-2xl font-bold">{pendingTasks}</p>
+               <div className="bg-yellow-100 dark:bg-yellow-900/30 rounded-lg p-4 text-center">
+                    <h3 className="text-sm text-gray-600 dark:text-yellow-300">
+                        Pendientes
+                    </h3>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                        {pendingTasks}
+                    </p>
                 </div>
 
-                <div className="bg-green-100 rounded-lg p-4 text-center">
-                    <h3 className="text-sm text-gray-500">Completadas</h3>
-                    <p className="text-2xl font-bold">{completedTasks}</p>
+                <div className="bg-green-100 dark:bg-green-900/30 rounded-lg p-4 text-center">
+                    <h3 className="text-sm text-gray-600 dark:text-green-300">
+                        Completadas
+                    </h3>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                        {completedTasks}
+                    </p>
                 </div>
 
             </div>
 
             {/* Filtros */}
 
-            <div className="flex justify-center gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 mb-6">
 
                 <button
                     onClick={() => setFilter("all")}
                     className={`px-4 py-2 rounded ${
                         filter === "all"
                             ? "bg-blue-600 text-white"
-                            : "bg-gray-200"
+                            : "bg-gray-200 dark:bg-slate-700"
                     }`}
                 >
                     Todas
@@ -206,7 +255,7 @@ export default function Home() {
                     className={`px-4 py-2 rounded ${
                         filter === "pending"
                             ? "bg-yellow-500 text-white"
-                            : "bg-gray-200"
+                            : "bg-gray-200 dark:bg-slate-700"
                     }`}
                 >
                     Pendientes
@@ -217,7 +266,7 @@ export default function Home() {
                     className={`px-4 py-2 rounded ${
                         filter === "completed"
                             ? "bg-green-600 text-white"
-                            : "bg-gray-200"
+                            : "bg-gray-200 dark:bg-slate-700"
                     }`}
                 >
                     Completadas
@@ -240,7 +289,7 @@ export default function Home() {
                     placeholder="🔍 Buscar tarea..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                 />
 
             </div>
@@ -256,6 +305,7 @@ export default function Home() {
                 onDeleteTask={deleteTask}
                 onToggleTask={toggleCompleted}
                 onEditTask={editTask}
+                darkMode={darkMode}
             />
 
         </div>
