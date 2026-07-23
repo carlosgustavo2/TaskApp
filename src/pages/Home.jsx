@@ -3,13 +3,13 @@ import TaskForm from "../components/TaskForm/TaskForm";
 import TaskList from "../components/TaskList/TaskList";
 import toast from "react-hot-toast";
 import { FaMoon, FaSun } from "react-icons/fa";
+import { supabase } from "../lib/supabase";
 
 export default function Home() {
 
     // ==========================
     // Estados
     // ==========================
-
     const [tasks, setTasks] = useState(() => {
         const savedTasks = localStorage.getItem("tasks");
         return savedTasks ? JSON.parse(savedTasks) : [];
@@ -21,28 +21,52 @@ export default function Home() {
     {/*DARK MODE*/}
     const [darkMode, setDarkMode] = useState(() => {
         return localStorage.theme === "dark";
-        });
+    });
+
+    // ==========================
+    // Cargar tareas desde Supabase
+    // ==========================
+    const loadTasks = async () => {
+
+        const { data, error } = await supabase
+            .from("tasks")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+        if (error) {
+
+            console.error(error);
+            return;
+
+        }
+
+        setTasks(data);
+
+    };
 
     // ==========================
     // Funciones
     // ==========================
-
-    const addTask = (title) => {
+    const addTask = async (title) => {
 
         if (!title.trim()) return;
 
-        const newTask = {
-            id: Date.now(),
-            title,
-            completed: false,
-            createdAt: new Date().toISOString()
-        };
+        const { error } = await supabase
+            .from("tasks")
+            .insert([
+                {
+                    title,
+                    completed: false
+                }
+            ]);
 
-        setTasks([...tasks, newTask]);
+        if (error) {
+            console.error(error);
+            return;
+        }
 
-        toast.success(`"${title}" agregada`, {
-            icon: "📋",       
-        });
+        await loadTasks();
+
     };
 
 
@@ -112,7 +136,6 @@ export default function Home() {
     // ==========================
     // Estadísticas
     // ==========================
-
     const completedTasks = tasks.filter(task => task.completed).length;
 
     const pendingTasks = tasks.filter(task => !task.completed).length;
@@ -120,7 +143,6 @@ export default function Home() {
     // ==========================
     // Filtrar
     // ==========================
-
     const filteredTasks = tasks.filter(task => {
 
         const matchesFilter =
@@ -140,7 +162,6 @@ export default function Home() {
     // ==========================
     // Ordenar
     // ==========================
-
     const sortedTasks = [...filteredTasks].sort((a, b) => {
 
         return a.completed - b.completed;
@@ -150,11 +171,19 @@ export default function Home() {
     // ==========================
     // LocalStorage
     // ==========================
-
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(tasks));
 
     }, [tasks]);
+
+    // ==========================
+    // SUPABASE CONNECTION
+    // ==========================
+    useEffect(() => {
+
+        loadTasks();
+
+    }, []);
 
     // ==========================
     // DARK MODE
